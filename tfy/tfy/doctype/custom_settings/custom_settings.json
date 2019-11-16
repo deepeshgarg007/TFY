@@ -1,0 +1,79 @@
+{
+ "creation": "2019-11-15 00:55:49.689747",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "enable_tax_gross_up",
+  "gst_income_account",
+  "gst_expense_account",
+  "column_break_4",
+  "limit"
+ ],
+ "fields": [
+  {
+   "fieldname": "gst_expense_account",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "GST Expense Account",
+   "options": "Account"
+  },
+  {
+   "fieldname": "gst_income_account",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "GST Income Account",
+   "options": "Account"
+  },
+  {
+   "default": "0",
+   "fieldname": "enable_tax_gross_up",
+   "fieldtype": "Check",
+   "label": "Enable Tax Gross Up",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "4",
+   "description": "This field is used to limit the number of historic item prices returned by API.",
+   "fieldname": "limit",
+   "fieldtype": "Int",
+   "label": "Limit"
+  }
+ ],
+ "issingle": 1,
+ "modified": "2019-11-16 16:01:58.307247",
+ "modified_by": "Administrator",
+ "module": "Tfy",
+ "name": "Custom Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
