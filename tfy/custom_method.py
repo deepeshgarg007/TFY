@@ -84,3 +84,14 @@ def create_gst_gl_entry(self, method):
 				})
 			)
 			make_gl_entries(gl_entries)
+
+def set_accounting_dimension_defaults(self, method):
+	accounting_dimension_defaults = get_accounting_dimension_defaults(self.tfy_transaction_type)
+	if accounting_dimension_defaults:
+		for row in accounting_dimension_defaults:
+			setattr(self, row.accounting_dimension_fieldname, row.default_value)
+
+@frappe.whitelist()
+def get_accounting_dimension_defaults(transaction_type):
+	if transaction_type and frappe.db.exists("Accounting Dimension Default", transaction_type):
+		return frappe.get_doc("Accounting Dimension Default", transaction_type).dimension_defaults

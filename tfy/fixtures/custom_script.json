@@ -1,0 +1,13 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Custom Script",
+  "dt": "Sales Invoice",
+  "modified": "2019-11-17 23:58:15.555244",
+  "name": "Sales Invoice-Client",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "script": "frappe.ui.form.on('Sales Invoice', {\n\ttfy_transaction_type: function(frm) {\n\t    if (frm.doc.tfy_transaction_type) {\n\t\t    frappe.call({\n\t\t\t    method: \"tfy.custom_method.get_accounting_dimension_defaults\",\n\t\t\t    args: {\n\t\t\t\t    transaction_type: frm.doc.tfy_transaction_type\n\t\t\t    }\n\t\t    }).done((r) => {\n\t\t\t    r.message.forEach((d) => {\n\t\t\t\t    frm.set_value(d.accounting_dimension_fieldname, d.default_value)\n\t\t\t    });\n\t\t    })\n\t    }\n\t}\n});"
+ }
+]

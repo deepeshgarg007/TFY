@@ -88,7 +88,8 @@ app_license = "MIT"
 # }
 doc_events = {
 	"Sales Invoice": {
-		"on_submit": "tfy.custom_method.create_gst_gl_entry"
+		"on_submit": "tfy.custom_method.create_gst_gl_entry",
+		"validate": "tfy.custom_method.set_accounting_dimension_defaults"
 	},
 	"Purchase Receipt": {
 		"on_submit": "tfy.custom_method.insert_item_price_history"
@@ -126,4 +127,3 @@ doc_events = {
 # override_whitelisted_methods = {
 # 	"frappe.desk.doctype.event.event.get_events": "tfy.event.get_events"
 # }
-

@@ -1,0 +1,69 @@
+{
+ "autoname": "field:transaction_type",
+ "creation": "2019-11-17 16:59:54.393532",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "transaction_type",
+  "dimension_defaults_section",
+  "dimension_defaults"
+ ],
+ "fields": [
+  {
+   "fieldname": "transaction_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Transaction Type",
+   "options": "Transaction Type",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "dimension_defaults_section",
+   "fieldtype": "Section Break",
+   "label": "Dimension Defaults"
+  },
+  {
+   "fieldname": "dimension_defaults",
+   "fieldtype": "Table",
+   "label": "Dimension Defaults",
+   "options": "Accounting Dimension Default Detail",
+   "reqd": 1
+  }
+ ],
+ "modified": "2019-11-17 23:49:00.073035",
+ "modified_by": "Administrator",
+ "module": "Tfy",
+ "name": "Accounting Dimension Default",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
