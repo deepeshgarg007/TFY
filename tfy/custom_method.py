@@ -15,7 +15,7 @@ def insert_item_price_history(self, method):
 			}).insert()
 
 @frappe.whitelist()
-def fetch_last_four_prices(item_code):
+def fetch_price_history(item_code):
 	limit = frappe.db.get_single_value("Custom Settings", 'limit') or 4
 	item_price = """
 		select 
@@ -95,3 +95,20 @@ def set_accounting_dimension_defaults(self, method):
 def get_accounting_dimension_defaults(transaction_type):
 	if transaction_type and frappe.db.exists("Accounting Dimension Default", transaction_type):
 		return frappe.get_doc("Accounting Dimension Default", transaction_type).dimension_defaults
+
+def default_distance(self, method):
+	#if available, always default distance from master
+	if self.shipping_address_name and self.company_address:
+		shipping_pincode = get_pincode(self.shipping_address_name)
+		company_pincode = get_pincode(self.company_address)
+		distance = frappe.db.get_value('Pincode Distance',
+							{'from_pincode': company_pincode,'to_pincode': shipping_pincode},
+							['distance'])
+		if distance > 0:
+			self.distance = distance
+	else:
+		self.distance = 0
+
+def get_pincode(address_name):
+	address = frappe.get_doc('Address', address_name)
+	return address.pincode
