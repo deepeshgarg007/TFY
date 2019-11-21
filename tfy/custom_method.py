@@ -102,8 +102,8 @@ def default_distance(self, method):
 		shipping_pincode = get_pincode(self.shipping_address_name)
 		company_pincode = get_pincode(self.company_address)
 		distance = frappe.db.get_value('Pincode Distance',
-							{'from_pincode': company_pincode,'to_pincode': shipping_pincode},
-							['distance'])
+						{'from_pincode': company_pincode,'to_pincode': shipping_pincode},
+						['distance'])
 		if distance > 0:
 			self.distance = distance
 	else:
