@@ -1,0 +1,130 @@
+{
+ "allow_import": 1,
+ "autoname": "TR.#############",
+ "creation": "2019-11-23 12:34:32.226550",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "bank",
+  "terminal_id",
+  "merchant_id",
+  "credit_card_no",
+  "auth_code",
+  "column_break_6",
+  "amount",
+  "status",
+  "ref_doctype",
+  "ref_docname"
+ ],
+ "fields": [
+  {
+   "fieldname": "bank",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Bank",
+   "options": "Bank",
+   "reqd": 1
+  },
+  {
+   "fieldname": "terminal_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Terminal ID",
+   "reqd": 1
+  },
+  {
+   "fieldname": "credit_card_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Credit Card No",
+   "reqd": 1
+  },
+  {
+   "fieldname": "auth_code",
+   "fieldtype": "Data",
+   "label": "Auth Code",
+   "reqd": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Amount",
+   "reqd": 1
+  },
+  {
+   "default": "Unreconciled",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Unreconciled\nReconciled\nAmount mismatch\nNo Matching Invoice\nPayment mismatch",
+   "read_only": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "ref_doctype",
+   "fieldtype": "Link",
+   "label": "Ref Doctype",
+   "options": "DocType",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ref_docname",
+   "fieldtype": "Dynamic Link",
+   "label": "Reference Docname",
+   "options": "ref_doctype",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_6",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "merchant_id",
+   "fieldtype": "Data",
+   "label": "Merchant ID",
+   "reqd": 1
+  }
+ ],
+ "modified": "2019-11-23 14:35:45.995873",
+ "modified_by": "Administrator",
+ "module": "Tfy",
+ "name": "Bank File Data",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

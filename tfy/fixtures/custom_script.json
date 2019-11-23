@@ -2,6 +2,17 @@
  {
   "docstatus": 0,
   "doctype": "Custom Script",
+  "dt": "Bank",
+  "modified": "2019-11-23 12:06:38.630010",
+  "name": "Bank-Client",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "script": "frappe.ui.form.on('Bank', {\n\tsetup: function(frm) {\n\t\tfrm.set_query(\"account\", function() {\n\t\t\treturn {\n\t\t\t\tfilters: { account_type: 'Bank', is_group: 0}\n\t\t\t};\n\t\t});\n\t}\n}); "
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Custom Script",
   "dt": "Sales Invoice",
   "modified": "2019-11-17 23:58:15.555244",
   "name": "Sales Invoice-Client",

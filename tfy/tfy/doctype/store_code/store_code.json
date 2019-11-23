@@ -1,0 +1,86 @@
+{
+ "allow_import": 1,
+ "creation": "2019-11-22 12:07:12.739597",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "title",
+  "company",
+  "store_code",
+  "merchant_id",
+  "terminal_id"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "store_code",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Store Code",
+   "reqd": 1
+  },
+  {
+   "fieldname": "merchant_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Merchant ID",
+   "reqd": 1
+  },
+  {
+   "fieldname": "terminal_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Terminal ID",
+   "reqd": 1
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Title"
+  }
+ ],
+ "modified": "2019-11-22 12:21:42.957100",
+ "modified_by": "Administrator",
+ "module": "Tfy",
+ "name": "Store Code",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}

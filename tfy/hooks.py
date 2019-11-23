@@ -116,7 +116,11 @@ doc_events = {
 # 		"tfy.tasks.monthly"
 # 	]
 # }
-
+scheduler_events = {
+	"hourly": [
+		"tfy.doctype.bank_file_data.bank_file_data.create_recon_entries"
+	]
+}
 # Testing
 # -------
 
@@ -128,3 +132,22 @@ doc_events = {
 # override_whitelisted_methods = {
 # 	"frappe.desk.doctype.event.event.get_events": "tfy.event.get_events"
 # }
+fixtures = [
+		{	"dt":"Custom Field",
+			"filters": [["name", "in", [
+				"Sales Invoice-tfy_transaction_type",
+				"Sales Invoice-auth_code",
+				"Sales Invoice-credit_card_no",
+				"Sales Invoice-store_code",
+				"Bank-account"
+		]]]
+		},
+		{"dt":"Custom Script", "filters": [["name", "in", [
+				"Sales Invoice-Client",
+				"Bank-Client"
+		]]]},
+		{"dt":"Property Setter", "filters": [["name", "in", [
+			"Pincode Distance-title_field",
+			"Store Code-title_field"
+		]]]}
+]
