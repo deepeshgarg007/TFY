@@ -96,7 +96,8 @@ def match_invoice(bank_transaction):
 					from
 						`tabSales Invoice`
 					where
-						name not in (select ref_docname from `tabBank File Data` where ref_doctype = 'Sales Invoice')
+						name not in (select ref_docname from `tabBank File Data` where ref_doctype = 'Sales Invoice'
+						and ref_docname IS NOT NULL)
 						and store_code = %s and auth_code = %s and credit_card_no = %s
 						and company = %s
 						and is_pos = 1 and docstatus = 1
