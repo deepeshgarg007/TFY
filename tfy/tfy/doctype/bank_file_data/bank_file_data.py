@@ -98,7 +98,7 @@ def match_invoice(bank_transaction):
 					where
 						name not in (select ref_docname from `tabBank File Data` where ref_doctype = 'Sales Invoice'
 						and ref_docname IS NOT NULL)
-						and store_code = %s and auth_code = %s and credit_card_no = %s
+						and store_code = %s and auth_code = %s and RIGHT(credit_card_no, 4) = %s
 						and company = %s
 						and is_pos = 1 and docstatus = 1
 					''', (bank_transaction['store_code'], bank_transaction['auth_code'], card_no[-4:], bank_transaction['company']), as_dict = 1)
