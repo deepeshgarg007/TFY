@@ -59,6 +59,8 @@ def create_gst_gl_entry(self, method):
 					#assume cost centers are same on all tax lines and pick anyone for gl entry
 					if taxes.cost_center:
 						cost_center = taxes.cost_center
+					else:
+						cost_center = frappe.db.get_value('Company',{'name': self.company},['cost_center'])
 
 		if tax_amount > 0:
 			gl_entries = []
