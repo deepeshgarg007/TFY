@@ -49,7 +49,7 @@ def create_entries(invoice_no, bank_transaction):
 		from erpnext.accounts.general_ledger import make_gl_entries
 		for mop in invoice.payments:
 			if mop.type == "Bank" and mop.base_amount == flt(bank_transaction["amount"]):
-				#find current entry
+				#find current entry for bank
 				gl_entry = frappe.db.sql('''
 								select
 									account, debit, party
