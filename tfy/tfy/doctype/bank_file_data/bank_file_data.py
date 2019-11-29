@@ -19,6 +19,7 @@ class BankFileData(Document):
 		if not self.status:
 			self.status = "Unreconciled"
 
+@frappe.whitelist()
 def create_recon_entries():
 	bank_transactions = frappe.db.sql('''
 							select
