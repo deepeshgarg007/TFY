@@ -54,7 +54,7 @@ def create_entries(invoice_no, bank_transaction):
 								select
 									account, debit, party
 								from
-									`tabGL entry`
+									`tabGL Entry`
 								where
 									company = %s and
 									voucher_type = 'Sales Invoice' and voucher_no = %s
