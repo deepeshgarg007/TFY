@@ -118,7 +118,7 @@ doc_events = {
 # }
 scheduler_events = {
 	"hourly": [
-		"tfy.doctype.bank_file_data.bank_file_data.create_recon_entries"
+		"tfy.tfy.doctype.bank_file_data.bank_file_data.create_recon_entries"
 	]
 }
 # Testing
