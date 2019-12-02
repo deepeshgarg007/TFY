@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 import frappe
 from frappe import _
+from frappe.utils import flt
 
 def insert_item_price_history(self, method):
 	if(self.items):
@@ -106,10 +107,10 @@ def default_distance(self, method):
 		distance = frappe.db.get_value('Pincode Distance',
 						{'from_pincode': company_pincode,'to_pincode': shipping_pincode},
 						['distance'])
-		if distance > 0:
+		if flt(distance) > 0.0:
 			self.distance = distance
 	else:
-		self.distance = 0
+		self.distance = 0.0
 
 def get_pincode(address_name):
 	address = frappe.get_doc('Address', address_name)
