@@ -14,11 +14,77 @@
   "docstatus": 0,
   "doctype": "Custom Script",
   "dt": "Sales Invoice",
-  "modified": "2019-11-17 23:58:15.555244",
+  "modified": "2019-12-12 13:20:58.141760",
   "name": "Sales Invoice-Client",
   "parent": null,
   "parentfield": null,
   "parenttype": null,
-  "script": "frappe.ui.form.on('Sales Invoice', {\n\ttfy_transaction_type: function(frm) {\n\t    if (frm.doc.tfy_transaction_type) {\n\t\t    frappe.call({\n\t\t\t    method: \"tfy.custom_method.get_accounting_dimension_defaults\",\n\t\t\t    args: {\n\t\t\t\t    transaction_type: frm.doc.tfy_transaction_type\n\t\t\t    }\n\t\t    }).done((r) => {\n\t\t\t    r.message.forEach((d) => {\n\t\t\t\t    frm.set_value(d.accounting_dimension_fieldname, d.default_value)\n\t\t\t    });\n\t\t    })\n\t    }\n\t}\n});"
+  "script": "frappe.ui.form.on('Sales Invoice', {\n\ttfy_transaction_type: function(frm) {\n\t    if (frm.doc.tfy_transaction_type) {\n\t\t    frappe.call({\n\t\t\t    method: \"tfy.custom_method.get_accounting_dimension_defaults\",\n\t\t\t    args: {\n\t\t\t\t    transaction_type: frm.doc.tfy_transaction_type\n\t\t\t    }\n\t\t    }).done((r) => {\n\t\t\t    r.message.forEach((d) => {\n\t\t\t\t    frm.set_value(d.accounting_dimension_fieldname, d.default_value)\n\t\t\t    });\n\t\t    })\n\t    }\n\t},\n\tcompany_address: function(frm) { \n        frappe.call({ method: 'frappe.client.get_value', \n            args: { \n                'doctype': 'Dynamic Link', 'parent': 'Address', \n                'filters': { 'link_doctype': 'Warehouse', 'parent': frm.doc.company_address }, \n                'fieldname': 'link_name' \n            }, \n            callback: function(r) { \n                if(r.message) { \n                    frm.set_value('warehouse', r.message.link); \n                    $.each(frm.doc.items || [], function(i, item) { \n                        frappe.model.set_value(item.doctype, item.name, \"warehouse\", r.message.link_name); \n                    }); \n                } \n            } \n        }); \n    }\n});"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Custom Script",
+  "dt": "Purchase Order",
+  "modified": "2019-12-12 13:22:17.394103",
+  "name": "Purchase Order-Client",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "script": "frappe.ui.form.on('Purchase Order', {\n\tshipping_address: function(frm) {\n\t   frappe.call({\n\t       method: 'frappe.client.get_value',\n\t       args: {\n\t           'doctype': 'Dynamic Link',\n\t           'parent': 'Address',\n\t           'filters': {\n\t                'link_doctype': 'Warehouse',\n\t                'parent': frm.doc.shipping_address\n\t           },\n\t           'fieldname': 'link_name'\n\t       },\n\t       callback: function(r) {\n\t           if(r.message) {\n\t                frm.set_value('set_warehouse', r.message.link_name);\n\t               $.each(frm.doc.items || [], function(i, item) {\n\t\t\t\t\t\tfrappe.model.set_value(item.doctype, item.name, \"warehouse\", r.message.link_name);\n\t\t\t\t\t});\n\t           }\n\t       }\n\t       \n\t   });\n\t}\n})"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Custom Script",
+  "dt": "Sales Order",
+  "modified": "2019-12-12 13:22:43.932481",
+  "name": "Sales Order-Client",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "script": "frappe.ui.form.on('Sales Order', {\n\tcompany_address: function(frm) {\n\t   frappe.call({\n\t       method: 'frappe.client.get_value',\n\t       args: {\n\t           'doctype': 'Dynamic Link',\n\t           'parent': 'Address',\n\t           'filters': {\n\t                'link_doctype': 'Warehouse',\n\t                'parent': frm.doc.company_address\n\t           },\n\t           'fieldname': 'link_name'\n\t       },\n\t       callback: function(r) {\n\t           if(r.message) {\n\t               frm.set_value('set_warehouse', r.message.link_name);\n\t               $.each(frm.doc.items || [], function(i, item) {\n\t\t\t\t\t\tfrappe.model.set_value(item.doctype, item.name, \"warehouse\", r.message.link_name);\n\t\t\t\t\t});\n\t           }\n\t       }\n\t       \n\t   });\n\t}\n})\n\nfrappe.ui.form.on('Sales Order Item', {\n\titems_add: function(frm, cdt, cdn) {\n\t\tvar row = frappe.get_doc(cdt, cdn);\n\t\tfrm.script_manager.copy_from_first_row(\"items\", row, 'warehouse');\n\t},\n})"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Custom Script",
+  "dt": "Data Import Beta",
+  "modified": "2019-12-12 13:28:53.557320",
+  "name": "Data Import Beta-Client",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "script": "frappe.ui.form.on('Data Import Beta', {\n\trefresh(frm) {\n\t\tif (frm.doc.status == \"Success\" && frm.doc.reference_doctype == \"Bank File Data\") {\n\t\t        frm.add_custom_button(__('Bank File'), function() \n                    {\n                        frm.events.bank_file(frm)}, __(\"Reconcile\"));\n\t\t            }\n            },\n\t\tbank_file: function(frm) {\n\t\t    frappe.call({\n\t\t        method: \"tfy.tfy.doctype.bank_file_data.bank_file_data.create_recon_entries\",\n\t\t        callback: function(r) {\n\t\t            console.log(r.message);\n\t\t        }\n\t\t    });\n\t\t}\n});\n"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Custom Script",
+  "dt": "Purchase Invoice",
+  "modified": "2019-12-12 13:29:15.735642",
+  "name": "Purchase Invoice-Client",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "script": "frappe.ui.form.on('Purchase Invoice', {\n\tshipping_address: function(frm) {\n\t   frappe.call({\n\t       method: 'frappe.client.get_value',\n\t       args: {\n\t           'doctype': 'Dynamic Link',\n\t           'parent': 'Address',\n\t           'filters': {\n\t                'link_doctype': 'Warehouse',\n\t                'parent': frm.doc.shipping_address\n\t           },\n\t           'fieldname': 'link_name'\n\t       },\n\t       callback: function(r) {\n\t           if(r.message) {\n\t               frm.set_value('warehouse', r.message.link_name);\n\t               $.each(frm.doc.items || [], function(i, item) {\n\t\t\t\t\t\tfrappe.model.set_value(item.doctype, item.name, \"warehouse\", r.message.link_name);\n\t\t\t\t\t});\n\t           }\n\t       }\n\t       \n\t   });\n\t}\n})"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Custom Script",
+  "dt": "Purchase Receipt",
+  "modified": "2019-12-12 13:30:46.326233",
+  "name": "Purchase Receipt-Client",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "script": "frappe.ui.form.on('Purchase Receipt', {\n\tshipping_address: function(frm) {\n\t   frappe.call({\n\t       method: 'frappe.client.get_value',\n\t       args: {\n\t           'doctype': 'Dynamic Link',\n\t           'parent': 'Address',\n\t           'filters': {\n\t                'link_doctype': 'Warehouse',\n\t                'parent': frm.doc.shipping_address\n\t           },\n\t           'fieldname': 'link_name'\n\t       },\n\t       callback: function(r) {\n\t           if(r.message) {\n\t               $.each(frm.doc.items || [], function(i, item) {\n\t\t\t\t\t\tfrappe.model.set_value(item.doctype, item.name, \"warehouse\", r.message.link_name);\n\t\t\t\t\t});\n\t           }\n\t       }\n\t       \n\t   });\n\t}\n})"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Custom Script",
+  "dt": "Delivery Note",
+  "modified": "2019-12-12 13:31:02.547141",
+  "name": "Delivery Note-Client",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "script": "frappe.ui.form.on('Delivery Note', {\n\tcompany_address: function(frm) {\n\t   frappe.call({\n\t       method: 'frappe.client.get_value',\n\t       args: {\n\t           'doctype': 'Dynamic Link',\n\t           'parent': 'Address',\n\t           'filters': {\n\t                'link_doctype': 'Warehouse',\n\t                'parent': frm.doc.company_address\n\t           },\n\t           'fieldname': 'link_name'\n\t       },\n\t       callback: function(r) {\n\t           if(r.message) {\n\t               $.each(frm.doc.items || [], function(i, item) {\n\t\t\t\t\t\tfrappe.model.set_value(item.doctype, item.name, \"warehouse\", r.message.link_name);\n\t\t\t\t\t});\n\t           }\n\t       }\n\t       \n\t   });\n\t}\n})"
  }
 ]

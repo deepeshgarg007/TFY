@@ -144,7 +144,13 @@ fixtures = [
 		},
 		{"dt":"Custom Script", "filters": [["name", "in", [
 				"Sales Invoice-Client",
-				"Bank-Client"
+				"Sales Order-Client",
+				"Delivery Note-Client",
+				"Purchase Order-Client",
+				"Purchase Receipt-Client",
+				"Purchase Invoice-Client",
+				"Data Import Beta-Client",
+				"Bank-Client",
 		]]]},
 		{"dt":"Property Setter", "filters": [["name", "in", [
 			"Pincode Distance-title_field",
