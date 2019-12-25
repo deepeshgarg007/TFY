@@ -1,33 +1,29 @@
 {
- "allow_import": 1,
- "autoname": "TR.#############",
  "creation": "2019-11-23 12:34:32.226550",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "company",
-  "bank",
-  "terminal_id",
-  "merchant_id",
+  "card_type",
   "credit_card_no",
   "auth_code",
+  "gross_amount",
+  "charges_amount",
+  "cgst_amount",
+  "sgst_amount",
+  "igst_amount",
+  "net_amount",
   "column_break_6",
-  "amount",
+  "transaction_date",
+  "terminal_id",
+  "merchant_id",
+  "transaction_count",
+  "digit_no",
   "status",
   "ref_doctype",
   "ref_docname"
  ],
  "fields": [
-  {
-   "fieldname": "bank",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Bank",
-   "options": "Bank",
-   "read_only": 1,
-   "reqd": 1
-  },
   {
    "fieldname": "terminal_id",
    "fieldtype": "Data",
@@ -52,28 +48,11 @@
    "reqd": 1
   },
   {
-   "fieldname": "amount",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "Amount",
-   "read_only": 1,
-   "reqd": 1
-  },
-  {
    "default": "Unreconciled",
    "fieldname": "status",
-   "fieldtype": "Select",
+   "fieldtype": "Data",
    "label": "Status",
-   "options": "Unreconciled\nReconciled\nAmount mismatch\nNo Matching Invoice\nPayment mismatch",
    "read_only": 1
-  },
-  {
-   "fieldname": "company",
-   "fieldtype": "Link",
-   "label": "Company",
-   "options": "Company",
-   "read_only": 1,
-   "reqd": 1
   },
   {
    "fieldname": "ref_doctype",
@@ -96,41 +75,90 @@
   {
    "fieldname": "merchant_id",
    "fieldtype": "Data",
-   "label": "Merchant ID",
+   "label": "ME Code",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "transaction_date",
+   "fieldtype": "Date",
+   "label": "Transaction Date",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "card_type",
+   "fieldtype": "Data",
+   "label": "Card Type",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "gross_amount",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Gross Amount",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "cgst_amount",
+   "fieldtype": "Float",
+   "label": "CGST Amount",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "sgst_amount",
+   "fieldtype": "Float",
+   "label": "SGST Amount",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "igst_amount",
+   "fieldtype": "Float",
+   "label": "IGST Amount",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "net_amount",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Net Amount",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "transaction_count",
+   "fieldtype": "Int",
+   "label": "Transaction Count",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "digit_no",
+   "fieldtype": "Data",
+   "label": "Digit No",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "charges_amount",
+   "fieldtype": "Float",
+   "label": "Charges Amount",
    "read_only": 1,
    "reqd": 1
   }
  ],
- "modified": "2019-11-23 15:29:41.562638",
+ "istable": 1,
+ "modified": "2019-12-25 14:14:26.229781",
  "modified_by": "Administrator",
  "module": "Tfy",
  "name": "Bank File Data",
  "owner": "Administrator",
- "permissions": [
-  {
-   "create": 1,
-   "delete": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "System Manager",
-   "share": 1,
-   "write": 1
-  },
-  {
-   "create": 1,
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Accounts Manager",
-   "share": 1,
-   "write": 1
-  }
- ],
+ "permissions": [],
  "sort_field": "modified",
  "sort_order": "DESC",
  "track_changes": 1

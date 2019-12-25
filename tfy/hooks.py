@@ -118,7 +118,7 @@ doc_events = {
 # }
 scheduler_events = {
 	"hourly": [
-		"tfy.tfy.doctype.bank_file_data.bank_file_data.create_recon_entries"
+		"tfy.tfy.doctype.bank_file.bank_file.create_recon_entries"
 	]
 }
 # Testing
@@ -138,16 +138,20 @@ fixtures = [
 				"Sales Invoice-tfy_transaction_type",
 				"Sales Invoice-auth_code",
 				"Sales Invoice-credit_card_no",
-				"Sales Invoice-store_code",
-				"Bank-account"
+				"Sales Invoice-match_status",
+				"Bank-account",
+				"Bank-charges_account",
+				"Bank-gst_clearing_account"
 		]]]
 		},
 		{"dt":"Custom Script", "filters": [["name", "in", [
 				"Sales Invoice-Client",
-				"Bank-Client"
+				"Bank-Client",
+				"Data Import Beta-Client"
 		]]]},
 		{"dt":"Property Setter", "filters": [["name", "in", [
 			"Pincode Distance-title_field",
-			"Store Code-title_field"
+			"Store Terminal-title_field",
+			"Bank File-title_field"
 		]]]}
 ]

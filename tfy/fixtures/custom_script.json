@@ -2,6 +2,17 @@
  {
   "docstatus": 0,
   "doctype": "Custom Script",
+  "dt": "Data Import Beta",
+  "modified": "2019-12-25 16:08:11.649342",
+  "name": "Data Import Beta-Client",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "script": "frappe.ui.form.on('Data Import Beta', {\n\trefresh(frm) {\n\t\tif (frm.doc.status == \"Success\") {\n\t\t        frm.add_custom_button(__('Match'), function() \n                    {\n                        frm.events.match_file(frm);\n                    }, __(\"Bank File\"));\n                \tfrm.add_custom_button(__('Create Entries'), function() \n                    {\n                        frm.events.create_entries(frm);\n                    }, __(\"Bank File\"));\n\t\t        }\n            },\n\t\tmatch_file: function(frm) {\n\t\t    frappe.call({\n\t\t        method: \"tfy.tfy.doctype.bank_file.bank_file.match_entries\",\n\t\t        callback: function(r) {\n\t\t            console.log(r.message);\n\t\t        }\n\t\t    });\n\t\t},\n\t\tcreate_entries: function(frm) {\n\t\t    frappe.call({\n\t\t        method: \"tfy.tfy.doctype.bank_file.bank_file.create_recon_entries\",\n\t\t        callback: function(r) {\n\t\t            console.log(r.message);\n\t\t        }\n\t\t    });\n\t\t}\n\t});"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Custom Script",
   "dt": "Bank",
   "modified": "2019-11-23 12:06:38.630010",
   "name": "Bank-Client",
@@ -14,11 +25,11 @@
   "docstatus": 0,
   "doctype": "Custom Script",
   "dt": "Sales Invoice",
-  "modified": "2019-11-17 23:58:15.555244",
+  "modified": "2019-12-25 17:05:45.248399",
   "name": "Sales Invoice-Client",
   "parent": null,
   "parentfield": null,
   "parenttype": null,
-  "script": "frappe.ui.form.on('Sales Invoice', {\n\ttfy_transaction_type: function(frm) {\n\t    if (frm.doc.tfy_transaction_type) {\n\t\t    frappe.call({\n\t\t\t    method: \"tfy.custom_method.get_accounting_dimension_defaults\",\n\t\t\t    args: {\n\t\t\t\t    transaction_type: frm.doc.tfy_transaction_type\n\t\t\t    }\n\t\t    }).done((r) => {\n\t\t\t    r.message.forEach((d) => {\n\t\t\t\t    frm.set_value(d.accounting_dimension_fieldname, d.default_value)\n\t\t\t    });\n\t\t    })\n\t    }\n\t}\n});"
+  "script": "frappe.ui.form.on('Sales Invoice', {\n\ttfy_transaction_type: function(frm) {\n\t    if (frm.doc.tfy_transaction_type) {\n\t\t    frappe.call({\n\t\t\t    method: \"tfy.custom_method.get_accounting_dimension_defaults\",\n\t\t\t    args: {\n\t\t\t\t    transaction_type: frm.doc.tfy_transaction_type\n\t\t\t    }\n\t\t    }).done((r) => {\n\t\t\t    r.message.forEach((d) => {\n\t\t\t\t    frm.set_value(d.accounting_dimension_fieldname, d.default_value)\n\t\t\t    });\n\t\t    })\n\t    }\n\t},\n\trefresh: function(frm) {\n\t    if (frm.doc.match_status === \"Matched Invoice\") {\n\t    var df_auth_code = frappe.meta.get_docfield(\"Sales Invoice\", \"auth_code\", cur_frm.doc.name);\n\t    var df_cc_no = frappe.meta.get_docfield(\"Sales Invoice\", \"credit_card_no\", cur_frm.doc.name);\n\t    df_auth_code.read_only = 1;\n\t    df_cc_no.read_only = 1;\n\t    }\n\t}\n});"
  }
 ]
