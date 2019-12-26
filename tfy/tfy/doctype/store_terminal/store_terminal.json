@@ -22,9 +22,10 @@
   },
   {
    "fieldname": "store_code",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Store Code",
+   "options": "Warehouse",
    "reqd": 1
   },
   {
@@ -48,10 +49,10 @@
    "label": "Title"
   }
  ],
- "modified": "2019-11-22 12:21:42.957100",
+ "modified": "2019-12-24 13:23:06.180328",
  "modified_by": "Administrator",
  "module": "Tfy",
- "name": "Store Code",
+ "name": "Store Terminal",
  "owner": "Administrator",
  "permissions": [
   {

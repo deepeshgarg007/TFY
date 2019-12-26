@@ -7,6 +7,8 @@
   "enable_tax_gross_up",
   "gst_income_account",
   "gst_expense_account",
+  "cc_account",
+  "warehouse",
   "column_break_4",
   "limit"
  ],
@@ -42,10 +44,22 @@
    "fieldname": "limit",
    "fieldtype": "Int",
    "label": "Limit"
+  },
+  {
+   "fieldname": "warehouse",
+   "fieldtype": "Link",
+   "label": "Store Code",
+   "options": "Warehouse"
+  },
+  {
+   "fieldname": "cc_account",
+   "fieldtype": "Link",
+   "label": "Credit Card Clearing Account",
+   "options": "Account"
   }
  ],
  "issingle": 1,
- "modified": "2019-11-16 16:01:58.307247",
+ "modified": "2019-12-24 16:01:55.950357",
  "modified_by": "Administrator",
  "module": "Tfy",
  "name": "Custom Settings",

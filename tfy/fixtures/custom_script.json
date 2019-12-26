@@ -2,6 +2,17 @@
  {
   "docstatus": 0,
   "doctype": "Custom Script",
+  "dt": "Data Import Beta",
+  "modified": "2019-12-25 16:08:11.649342",
+  "name": "Data Import Beta-Client",
+  "parent": null,
+  "parentfield": null,
+  "parenttype": null,
+  "script": "frappe.ui.form.on('Data Import Beta', {\n\trefresh(frm) {\n\t\tif (frm.doc.status == \"Success\") {\n\t\t        frm.add_custom_button(__('Match'), function() \n                    {\n                        frm.events.match_file(frm);\n                    }, __(\"Bank File\"));\n                \tfrm.add_custom_button(__('Create Entries'), function() \n                    {\n                        frm.events.create_entries(frm);\n                    }, __(\"Bank File\"));\n\t\t        }\n            },\n\t\tmatch_file: function(frm) {\n\t\t    frappe.call({\n\t\t        method: \"tfy.tfy.doctype.bank_file.bank_file.match_entries\",\n\t\t        callback: function(r) {\n\t\t            console.log(r.message);\n\t\t        }\n\t\t    });\n\t\t},\n\t\tcreate_entries: function(frm) {\n\t\t    frappe.call({\n\t\t        method: \"tfy.tfy.doctype.bank_file.bank_file.create_recon_entries\",\n\t\t        callback: function(r) {\n\t\t            console.log(r.message);\n\t\t        }\n\t\t    });\n\t\t}\n\t});"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Custom Script",
   "dt": "Bank",
   "modified": "2019-11-23 12:06:38.630010",
   "name": "Bank-Client",
@@ -14,7 +25,7 @@
   "docstatus": 0,
   "doctype": "Custom Script",
   "dt": "Sales Invoice",
-  "modified": "2019-12-12 13:20:58.141760",
+  "modified": "2019-12-25 13:20:58.141760",
   "name": "Sales Invoice-Client",
   "parent": null,
   "parentfield": null,
