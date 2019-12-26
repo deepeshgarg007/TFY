@@ -101,9 +101,12 @@ def match_entries():
 					invoice.save()
 
 def create_entries(bank_transactions):
-	bank, batch_no, batch_date = ['', '', '']
+	def_wh, cc_acc = ['', '']
 	def_wh = frappe.db.get_single_value("Custom Settings", 'warehouse')
 	cc_acc = frappe.db.get_single_value("Custom Settings", 'cc_account')
+
+	if not def_wh or not cc_acc:
+		frappe.throw(_("Please set up default store code and credit card clearing account in settings"))
 
 	transaction = []
 	for bank_transaction in bank_transactions:
@@ -113,23 +116,29 @@ def create_entries(bank_transactions):
 			bank_acc = bank_account['account']
 			charges_acc = bank_account['charges_account']
 
+		user_remark =  bank_transaction['bank'] + "/" + bank_transaction['batch_no']
+
 		if bank_transaction['net_amount'] > 0:
 			transaction.append({'account': bank_acc, 'debit': bank_transaction['net_amount'], 'credit': 0, 'store_code': def_wh, 
-				'posting_date': bank_transaction['posting_date'], 'company': bank_transaction['company']})
+				'posting_date': bank_transaction['posting_date'], 'company': bank_transaction['company'],
+				'user_remark': user_remark })
 		if bank_transaction['gst_amount'] > 0:
 			transaction.append({'account': clearing_acc, 'debit': bank_transaction['gst_amount'], 'credit': 0, 'store_code': def_wh, 
-				'posting_date': bank_transaction['posting_date'], 'company': bank_transaction['company']})
+				'posting_date': bank_transaction['posting_date'], 'company': bank_transaction['company'],
+				'user_remark': user_remark })
 		if bank_transaction['charges'] > 0:
 			transaction.append({'account': charges_acc, 'debit': bank_transaction['charges'], 'credit': 0, 'store_code': bank_transaction['store_code'], 
-				'posting_date': bank_transaction['posting_date'], 'company': bank_transaction['company']})
+				'posting_date': bank_transaction['posting_date'], 'company': bank_transaction['company'],
+				'user_remark': user_remark })
 		if bank_transaction['gross_amount'] > 0:
 			transaction.append({'account': cc_acc, 'credit': bank_transaction['gross_amount'], 'debit': 0, 'store_code': bank_transaction['store_code'], 
-				'posting_date': bank_transaction['posting_date'], 'company': bank_transaction['company']})
+				'posting_date': bank_transaction['posting_date'], 'company': bank_transaction['company'],
+				'user_remark': user_remark })
 
 	if transaction:
 		jv_name = create_jv(transaction)
 		for tran in bank_transactions:
-			update_jv_bank_file(bank_transaction, jv_name)
+			update_jv_bank_file(tran, jv_name)
 
 def match_invoice(bank_transaction):
 	card_no = bank_transaction['credit_card_no']
@@ -167,7 +176,8 @@ def create_jv(transaction):
 				"debit_in_account_currency": tran['debit'],
 				"debit": tran['debit'],
 				"credit_in_account_currency": 0,
-				"credit": 0
+				"credit": 0,
+				"user_remark": tran['user_remark']
 			})
 		#credit lines
 		elif tran['credit'] > 0:
@@ -177,7 +187,8 @@ def create_jv(transaction):
 				"debit_in_account_currency": 0,
 				"debit": 0,
 				"credit_in_account_currency": tran['credit'],
-				"credit": tran['credit']
+				"credit": tran['credit'],
+				"user_remark": tran['user_remark']
 			})
 
 	try:
