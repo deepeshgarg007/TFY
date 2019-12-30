@@ -141,7 +141,10 @@ fixtures = [
 				"Sales Invoice-match_status",
 				"Bank-account",
 				"Bank-charges_account",
-				"Bank-gst_clearing_account"
+				"Bank-gst_clearing_account",
+				"Company-inter_company_accounts",
+				"Company-inter_company_income_account",
+				"Company-inter_company_expense_account"
 		]]]
 		},
 		{"dt":"Custom Script", "filters": [["name", "in", [

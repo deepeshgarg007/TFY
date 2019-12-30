@@ -2,17 +2,6 @@
  {
   "docstatus": 0,
   "doctype": "Custom Script",
-  "dt": "Data Import Beta",
-  "modified": "2019-12-25 16:08:11.649342",
-  "name": "Data Import Beta-Client",
-  "parent": null,
-  "parentfield": null,
-  "parenttype": null,
-  "script": "frappe.ui.form.on('Data Import Beta', {\n\trefresh(frm) {\n\t\tif (frm.doc.status == \"Success\") {\n\t\t        frm.add_custom_button(__('Match'), function() \n                    {\n                        frm.events.match_file(frm);\n                    }, __(\"Bank File\"));\n                \tfrm.add_custom_button(__('Create Entries'), function() \n                    {\n                        frm.events.create_entries(frm);\n                    }, __(\"Bank File\"));\n\t\t        }\n            },\n\t\tmatch_file: function(frm) {\n\t\t    frappe.call({\n\t\t        method: \"tfy.tfy.doctype.bank_file.bank_file.match_entries\",\n\t\t        callback: function(r) {\n\t\t            console.log(r.message);\n\t\t        }\n\t\t    });\n\t\t},\n\t\tcreate_entries: function(frm) {\n\t\t    frappe.call({\n\t\t        method: \"tfy.tfy.doctype.bank_file.bank_file.create_recon_entries\",\n\t\t        callback: function(r) {\n\t\t            console.log(r.message);\n\t\t        }\n\t\t    });\n\t\t}\n\t});"
- },
- {
-  "docstatus": 0,
-  "doctype": "Custom Script",
   "dt": "Bank",
   "modified": "2019-11-23 12:06:38.630010",
   "name": "Bank-Client",
@@ -58,12 +47,12 @@
   "docstatus": 0,
   "doctype": "Custom Script",
   "dt": "Data Import Beta",
-  "modified": "2019-12-12 13:28:53.557320",
+  "modified": "2019-12-30 08:49:18.335086",
   "name": "Data Import Beta-Client",
   "parent": null,
   "parentfield": null,
   "parenttype": null,
-  "script": "frappe.ui.form.on('Data Import Beta', {\n\trefresh(frm) {\n\t\tif (frm.doc.status == \"Success\" && frm.doc.reference_doctype == \"Bank File Data\") {\n\t\t        frm.add_custom_button(__('Bank File'), function() \n                    {\n                        frm.events.bank_file(frm)}, __(\"Reconcile\"));\n\t\t            }\n            },\n\t\tbank_file: function(frm) {\n\t\t    frappe.call({\n\t\t        method: \"tfy.tfy.doctype.bank_file_data.bank_file_data.create_recon_entries\",\n\t\t        callback: function(r) {\n\t\t            console.log(r.message);\n\t\t        }\n\t\t    });\n\t\t}\n});\n"
+  "script": "frappe.ui.form.on('Data Import Beta', {\n    refresh(frm) {\n        if (frm.doc.status == \"Success\") {\n            frm.add_custom_button(__('Match'), function()  {\n                frm.events.match_file(frm);                    \n            }, __(\"Bank File\"));               \n            \n            frm.add_custom_button(__('Create Entries'), function() {                        \n                frm.events.create_entries(frm);  \n            }, __(\"Bank File\"));\n        }            \n    },\n    match_file: function(frm) \n    { \n        frappe.call({\n            method: \"tfy.tfy.doctype.bank_file.bank_file.match_entries\",        \n            callback: function(r) {           \n                console.log(r.message);        \n            }    \n        });\n    },\n    create_entries: function(frm) {    \n        frappe.call({        \n            method: \"tfy.tfy.doctype.bank_file.bank_file.create_recon_entries\",        \n            callback: function(r) {           \n                console.log(r.message);        \n            }\n        });\n    }\n});"
  },
  {
   "docstatus": 0,
@@ -91,11 +80,11 @@
   "docstatus": 0,
   "doctype": "Custom Script",
   "dt": "Delivery Note",
-  "modified": "2019-12-12 13:31:02.547141",
+  "modified": "2019-12-29 22:35:29.739333",
   "name": "Delivery Note-Client",
   "parent": null,
   "parentfield": null,
   "parenttype": null,
-  "script": "frappe.ui.form.on('Delivery Note', {\n\tcompany_address: function(frm) {\n\t   frappe.call({\n\t       method: 'frappe.client.get_value',\n\t       args: {\n\t           'doctype': 'Dynamic Link',\n\t           'parent': 'Address',\n\t           'filters': {\n\t                'link_doctype': 'Warehouse',\n\t                'parent': frm.doc.company_address\n\t           },\n\t           'fieldname': 'link_name'\n\t       },\n\t       callback: function(r) {\n\t           if(r.message) {\n\t               $.each(frm.doc.items || [], function(i, item) {\n\t\t\t\t\t\tfrappe.model.set_value(item.doctype, item.name, \"warehouse\", r.message.link_name);\n\t\t\t\t\t});\n\t           }\n\t       }\n\t       \n\t   });\n\t}\n})"
+  "script": "frappe.ui.form.on('Delivery Note', {\n     onload: function(frm) {\n        frappe.call({\n\t       method: 'frappe.client.get_value',\n\t       args: {\n\t           'doctype': 'Company',\n\t           'filters': {\n\t                'name': frm.doc.company,\n\t           },\n\t           'fieldname': 'inter_company_expense_account'\n\t       },\n\t       callback: function(r) {\n\t           if(r.message) {\n\t                frm.doc.inter_company_expense_account = r.message.inter_company_expense_account;\n\t           }\n\t       }\n\t   });\n    },\n\tcompany_address: function(frm) {\n\t   frappe.call({\n\t       method: 'frappe.client.get_value',\n\t       args: {\n\t           'doctype': 'Dynamic Link',\n\t           'parent': 'Address',\n\t           'filters': {\n\t                'link_doctype': 'Warehouse',\n\t                'parent': frm.doc.company_address\n\t           },\n\t           'fieldname': 'link_name'\n\t       },\n\t       callback: function(r) {\n\t           if(r.message) {\n\t               $.each(frm.doc.items || [], function(i, item) {\n\t\t\t\t\t\tfrappe.model.set_value(item.doctype, item.name, \"warehouse\", r.message.link_name);\n\t\t\t\t\t});\n\t           }\n\t       }\n\t       \n\t   });\n\t}\n});\n\nfrappe.ui.form.on('Delivery Note Item', {\n\titem_code: function(frm, cdt, cdn) {\n\t    if (frm.doc.is_internal_customer) {\n            frappe.model.set_value(cdt, cdn, 'expense_account', frm.doc.inter_company_expense_account);\n\t    }\n\t}\n});"
  }
 ]
