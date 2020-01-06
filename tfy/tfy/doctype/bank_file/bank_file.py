@@ -3,6 +3,7 @@
 # For license information, please see license.txt
 from __future__ import unicode_literals
 import frappe
+import erpnext
 from frappe import _
 from frappe.utils import flt
 from frappe.model.document import Document
@@ -43,18 +44,18 @@ class BankFile(Document):
 def create_recon_entries():
 	bank_transactions = frappe.db.sql('''
 							select
-								a.bank, a.batch_no, a.batch_date, 
-								(select 
-									ifnull(c.store_code, '') 
-								from 
+								a.bank, a.batch_no, a.batch_date,
+								(select
+									ifnull(c.store_code, '')
+								from
 									`tabStore Terminal` c
-								where 
+								where
 									a.company = c.company and
 									b.terminal_id = c.terminal_id and
 									b.merchant_id = c.merchant_id) as store_code,
 								a.posting_date, a.company,
-								sum(b.gross_amount) as gross_amount, sum(b.charges_amount) as charges, 
-								sum(b.cgst_amount + b.sgst_amount + b.igst_amount) as gst_amount, 
+								sum(b.gross_amount) as gross_amount, sum(b.charges_amount) as charges,
+								sum(b.cgst_amount + b.sgst_amount + b.igst_amount) as gst_amount,
 								sum(b.net_amount) as net_amount
 							from
 								`tabBank File` a, `tabBank File Data` b
@@ -73,12 +74,12 @@ def match_entries():
 	bank_transactions = frappe.db.sql('''
 							select
 								b.name, a.company, a.bank, b.terminal_id, b.credit_card_no,
-								b.auth_code, b.gross_amount, 
-								(select 
-									ifnull(c.store_code, '') 
-								from 
+								b.auth_code, b.gross_amount,
+								(select
+									ifnull(c.store_code, '')
+								from
 									`tabStore Terminal` c
-								where 
+								where
 									a.company = c.company and
 									b.terminal_id = c.terminal_id and
 									b.merchant_id = c.merchant_id) as store_code,
@@ -119,19 +120,19 @@ def create_entries(bank_transactions):
 		user_remark =  bank_transaction['bank'] + "/" + bank_transaction['batch_no']
 
 		if bank_transaction['net_amount'] > 0:
-			transaction.append({'account': bank_acc, 'debit': bank_transaction['net_amount'], 'credit': 0, 'store_code': def_wh, 
+			transaction.append({'account': bank_acc, 'debit': bank_transaction['net_amount'], 'credit': 0, 'store_code': def_wh,
 				'posting_date': bank_transaction['posting_date'], 'company': bank_transaction['company'],
 				'user_remark': user_remark })
 		if bank_transaction['gst_amount'] > 0:
-			transaction.append({'account': clearing_acc, 'debit': bank_transaction['gst_amount'], 'credit': 0, 'store_code': def_wh, 
+			transaction.append({'account': clearing_acc, 'debit': bank_transaction['gst_amount'], 'credit': 0, 'store_code': def_wh,
 				'posting_date': bank_transaction['posting_date'], 'company': bank_transaction['company'],
 				'user_remark': user_remark })
 		if bank_transaction['charges'] > 0:
-			transaction.append({'account': charges_acc, 'debit': bank_transaction['charges'], 'credit': 0, 'store_code': bank_transaction['store_code'], 
+			transaction.append({'account': charges_acc, 'debit': bank_transaction['charges'], 'credit': 0, 'store_code': bank_transaction['store_code'],
 				'posting_date': bank_transaction['posting_date'], 'company': bank_transaction['company'],
 				'user_remark': user_remark })
 		if bank_transaction['gross_amount'] > 0:
-			transaction.append({'account': cc_acc, 'credit': bank_transaction['gross_amount'], 'debit': 0, 'store_code': bank_transaction['store_code'], 
+			transaction.append({'account': cc_acc, 'credit': bank_transaction['gross_amount'], 'debit': 0, 'store_code': bank_transaction['store_code'],
 				'posting_date': bank_transaction['posting_date'], 'company': bank_transaction['company'],
 				'user_remark': user_remark })
 
@@ -148,12 +149,12 @@ def match_invoice(bank_transaction):
 					from
 						`tabSales Invoice`
 					where
-						name not in 
+						name not in
 						(select
-							ref_docname 
-						from 
-							`tabBank File Data` 
-						where 
+							ref_docname
+						from
+							`tabBank File Data`
+						where
 							ref_doctype = 'Sales Invoice' and ref_docname IS NOT NULL)
 						and warehouse = %s and auth_code = %s and RIGHT(credit_card_no, 4) = %s
 						and company = %s
@@ -177,7 +178,8 @@ def create_jv(transaction):
 				"debit": tran['debit'],
 				"credit_in_account_currency": 0,
 				"credit": 0,
-				"user_remark": tran['user_remark']
+				"user_remark": tran['user_remark'],
+				"cost_center": erpnext.get_default_cost_center(tran['company'])
 			})
 		#credit lines
 		elif tran['credit'] > 0:
@@ -188,7 +190,8 @@ def create_jv(transaction):
 				"debit": 0,
 				"credit_in_account_currency": tran['credit'],
 				"credit": tran['credit'],
-				"user_remark": tran['user_remark']
+				"user_remark": tran['user_remark'],
+				"cost_center": erpnext.get_default_cost_center(tran['company'])
 			})
 
 	try:
