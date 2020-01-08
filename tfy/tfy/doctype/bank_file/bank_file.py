@@ -70,10 +70,12 @@ def create_recon_entries():
 
 @frappe.whitelist()
 def match_entries():
+	mops = get_cc_mop()
+
 	bank_transactions = frappe.db.sql('''
 							select
 								b.name, a.company, a.bank, b.terminal_id, b.credit_card_no,
-								b.auth_code, b.gross_amount, 
+								b.auth_code, b.gross_amount,
 								(select 
 									ifnull(c.store_code, '') 
 								from 
@@ -87,7 +89,7 @@ def match_entries():
 								`tabBank File` a, `tabBank File Data` b
 							where
 								a.name = b.parent and
-								b.status in ('Unreconciled')
+								b.status in ('Unreconciled', 'Amount Mismatch')
 							''', as_dict=1)
 
 	for bank_transaction in bank_transactions:
@@ -96,9 +98,18 @@ def match_entries():
 			for invoice in invoices:
 				invoice = frappe.get_doc('Sales Invoice', invoice['name'])
 				if invoice.grand_total != 0:
-					update_bank_tran_status(bank_transaction, "Matched Invoice", "Sales Invoice", invoice.name)
-					invoice.match_status = "Matched Invoice"
-					invoice.save()
+					mop_amount = 0
+					for mop in invoice.payments:
+						if mops.get(mop.mode_of_payment, {}).get("is_credit_card", []):
+							mop_amount += mop.base_amount
+					if mop_amount == bank_transaction['gross_amount']:
+						update_bank_tran_status(bank_transaction, "Matched Invoice", "Sales Invoice", invoice.name)
+						invoice.match_status = "Matched Invoice"
+						invoice.save()
+					else:
+						update_bank_tran_status(bank_transaction, "Amount Mismatch", "Sales Invoice", invoice.name)
+						invoice.match_status = "Amount Mismatch"
+						invoice.save()
 
 def create_entries(bank_transactions):
 	def_wh, cc_acc = ['', '']
@@ -198,6 +209,20 @@ def create_jv(transaction):
 			return je_doc.name
 	except Exception as e:
 		frappe.log_error(message=e, title="Clearing JV Error")
+
+def get_cc_mop():
+	mop_dict = {}
+	mops = frappe.db.sql('''
+					select
+						name as mop, is_credit_card
+					from
+						`tabMode of Payment`
+				''', as_dict = 1)
+	for d in mops:
+		mop_dict.setdefault(d.mop, frappe._dict()).setdefault(
+			"is_credit_card", []).append(d.is_credit_card)
+
+	return mop_dict
 
 def update_bank_tran_status(bank_transaction, status, ref_doctype=None, ref_docname=None):
 	bank_tran = frappe.get_doc('Bank File Data', bank_transaction['name'])
