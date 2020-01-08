@@ -141,7 +141,8 @@ fixtures = [
 				"Sales Invoice-match_status",
 				"Bank-account",
 				"Bank-charges_account",
-				"Bank-gst_clearing_account"
+				"Bank-gst_clearing_account",
+				"Mode of Payment-is_credit_card"
 		]]]
 		},
 		{"dt":"Custom Script", "filters": [["name", "in", [
