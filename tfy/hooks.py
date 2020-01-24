@@ -145,6 +145,7 @@ fixtures = [
 				"Company-inter_company_accounts",
 				"Company-inter_company_income_account",
 				"Company-inter_company_expense_account"
+				"Mode of Payment-is_credit_card"
 		]]]
 		},
 		{"dt":"Custom Script", "filters": [["name", "in", [
