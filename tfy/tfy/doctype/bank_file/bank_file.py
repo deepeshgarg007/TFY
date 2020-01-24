@@ -101,7 +101,8 @@ def match_entries():
 				if invoice.grand_total != 0:
 					mop_amount = 0
 					for mop in invoice.payments:
-						if mops.get(mop.mode_of_payment, {}).get("is_credit_card", []):
+						is_credit_card = mops.get(mop.mode_of_payment, {}).get("is_credit_card", [])[0]
+						if is_credit_card:
 							mop_amount += mop.base_amount
 					if mop_amount == bank_transaction['gross_amount']:
 						update_bank_tran_status(bank_transaction, "Matched Invoice", "Sales Invoice", invoice.name)
