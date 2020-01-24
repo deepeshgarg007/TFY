@@ -22,7 +22,7 @@
   "in_list_view": 0,
   "in_standard_filter": 0,
   "insert_after": "mode_of_payment",
-  "label": "Is credit Card",
+  "label": "Is Credit Card",
   "length": 0,
   "modified": "2020-01-08 23:39:13.981207",
   "name": "Mode of Payment-is_credit_card",
