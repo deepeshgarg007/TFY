@@ -144,7 +144,7 @@ fixtures = [
 				"Bank-gst_clearing_account",
 				"Company-inter_company_accounts",
 				"Company-inter_company_income_account",
-				"Company-inter_company_expense_account"
+				"Company-inter_company_expense_account",
 				"Mode of Payment-is_credit_card"
 		]]]
 		},
